@@ -1,0 +1,10 @@
+Dataset Type: Primary
+
+I am using the dataset acquired from Kaggle, which lists a variety of food products, their ingredients, allergens, and predictions. The file contains the following data points (columns) :
++ Food Product: The name of the food product.
++ Main Ingredient: The primary ingredient of the food product.
++ Sweetener: The type or presence of a sweetener used in the food product.
++ Fat/Oil: The type or presence of fat or oil used in the food product.
++ Seasoning: The spices or seasonings added to enhance the flavor of the food product.
++ Allergens: The list of allergens associated with the food product, indicating potential allergic reactions.
++ Prediction: Label for the food product based on its ingredients and allergens.
