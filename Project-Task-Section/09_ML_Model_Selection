@@ -1,0 +1,10 @@
+ML Model Selection
+
+The data contains food items, and we are trying to predict if a food has allergens or not.
+It is a supervised classification problem.
+
+Model Choices:
++ Logistic Regression
++ Random Forest
++ Naive Bayes
++ Support Vector Machine (SVM)
