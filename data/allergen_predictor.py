@@ -11,7 +11,7 @@ import joblib
 
 #Step 2: Load datasets
 
-df = pd.read_csv('Midterm-Final Project/food_ingredients_and_allergens.csv')
+df = pd.read_csv('data/food_ingredients_and_allergens.csv') #hello, if this part doesn't work please copy relative path of the csv file and paste between the single quotes
 
 #Display first few rows
 
