@@ -1,0 +1,3 @@
+Reflection and Argument
+
+After running the code, the result show that the models' prediction rate is very highly accurate, which looks kind of suspicious. I think there might be an issue either with the dataset or the procedure of sampling. 
