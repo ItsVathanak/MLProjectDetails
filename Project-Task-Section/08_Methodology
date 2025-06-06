@@ -25,7 +25,8 @@ Methodology
 4. Data visualization
 
 - visualize the class distribution
-- scatter plot to know the outlier
+- boxplot for one encoded feature
+- heatmap of feature correlations
 
 5. Data Preprocessing
 
