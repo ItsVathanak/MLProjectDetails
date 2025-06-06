@@ -1,0 +1,6 @@
+Accuracy
+
+ After training the four models (Logistic Regression, Random Forest, Naive Bayes, SVM), their performance were compared using Accuracyand f1-score.
+ Out of the 4, only Naive Bayes model was lowest ranked in both accuracy and f1-score.
+ The other 3 models were tied for highest accuracy and f1-score.
+ Random Forest was chosen as the final model.
