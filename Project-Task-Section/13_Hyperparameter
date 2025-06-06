@@ -1,0 +1,13 @@
+Hyperparameter
+
+For logistic regression:
+The max iteration was set to 1000 to ensure convergence.
+
+For random forest classifier:
+The random state value was 32 to ensure reproducibility. The amount of 'trees' in the forest was 100 by default.
+
+For naive bayes:
+Instead of the standardized data, I used an encoded version. The alpha was set to 1 (Additive or Laplace smoothing)
+
+For SVM:
+The kernel was set to 'linear'.
