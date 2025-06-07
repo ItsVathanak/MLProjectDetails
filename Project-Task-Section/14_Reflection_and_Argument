@@ -1,3 +1,8 @@
 Reflection and Argument
 
-After running the code, the result show that the models' prediction rate is very highly accurate, which looks kind of suspicious. I think there might be an issue either with the dataset or the procedure of sampling. 
+This project highlighted the practical power of machine learning in solving real-world health and safety challenges—specifically, identifying potential allergens in food products.
+Throughout the process, I faced and addressed common issues such as data imbalance, feature leakage, and the interpretability of model predictions.
+By testing multiple algorithms and using visualizations and feature importance analyses, I gained deeper insights into how certain ingredients relate to allergen presence.
+One key realization was the importance of data stratification and careful feature selection—factors that significantly influenced model fairness and performance.
+Ultimately, this project demonstrates how predictive models, when responsibly built and analyzed, can support safer food labeling and help consumers with allergies make more informed choices.
+It also reminds us that model results are only as reliable as the data behind them—highlighting the need for transparency and domain knowledge in applying AI to sensitive topics like food safety. 
