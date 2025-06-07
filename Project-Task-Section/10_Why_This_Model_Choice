@@ -1,30 +1,8 @@
 Why choose this model?
 
-1. Logistic Regression
-Why: A strong baseline for binary classification tasks.
+Final model: Random Forest
 
-Strength: Interpretable, fast, and works well with TF-IDF or one-hot encoded features.
-
-Limitation: Assumes linear relationship; may underperform on more complex patterns.
-
-2. Naive Bayes 
-Why: Designed for text data where features are word counts or frequencies.
-
-Strength: Very efficient with high-dimensional sparse data (like bag-of-words).
-
-Limitation: Assumes feature independence, which may not always hold true.
-
-3. Random Forest
-Why: Works well with categorical or numerical tabular data, and can handle non-linear patterns.
-
-Strength: Robust to overfitting, interpretable (via feature importance).
-
-Limitation: Less effective if you’re relying on raw text data unless it’s preprocessed well.
-
-4. Support Vector Machine (SVM)
-Why: Excellent for high-dimensional spaces (like TF-IDF features).
-
-Strength: Effective with sparse data and works well for binary classification.
-
-Limitation: Doesn’t scale well with large datasets.
-
+Why:
+-Works well with categorical or numerical tabular data, and can handle non-linear patterns.
+-Robust to overfitting
+-Interpretable (via feature importance)
