@@ -11,7 +11,7 @@ import joblib
 
 #Step 2: Load datasets
 
-df = pd.read_csv('data/food_ingredients_and_allergens.csv') #hello, if this part doesn't work please copy relative path of the csv file and paste between the single quotes
+df = pd.read_csv('data/food_ingredients_and_allergens.csv') #please copy the relative path of the csv file and paste here
 
 #Display first few rows
 
@@ -39,8 +39,12 @@ plt.show()
 #We are dropping 'Allergens' and 'Food Product', since they ar enot predictive or leak output
 df = df.drop(columns=['Allergens','Food Product'])
 
-#Drop missing values
-df = df.dropna()
+# #Drop missing values
+# df = df.dropna()
+
+#Drop rows where 'Prediction" is missing
+df.dropna(subset=['Prediction'], inplace=True)
+print(f"\nDataframe shape after drpping rows that are missing 'Prediction': {df.shape}")
 
 #Separate features and target
 X = df.drop(columns=['Prediction'])
@@ -68,21 +72,36 @@ print(X_standardized.head())
 
 X_train, X_test, y_train, y_test = train_test_split(X_standardized, y, test_size=0.2, random_state=42, stratify=y)
 
+#Because the dataset is imbalanced, we gotta use SMOTE to fix it
+# Import SMOTE
+from imblearn.over_sampling import SMOTE
+
+# Apply SMOTE to the training data only
+smote = SMOTE(random_state=42)
+X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
+print(f"\nShape of X_train before SMOTE: {X_train.shape}")
+print(f"Shape of X_train after SMOTE: {X_train_resampled.shape}")
+print("\nClass distribution in y_train before SMOTE:")
+print(y_train.value_counts())
+print("\nClass distribution in y_train after SMOTE:")
+print(y_train_resampled.value_counts())
+
 #Step 7 & 8: Choosing ML algorithm and training
 # We are going to try Logistic regression, random forest, naive bayes, and support vector machine
 
 #import models
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
 # Dictionary to hold models and their names
 models = {
-    "Random Forest": RandomForestClassifier(random_state=42),
-    "Logistic Regression": LogisticRegression(max_iter=1000),
-    "Naive Bayes": MultinomialNB(),  # Assumes non-negative input
-    "SVM": SVC(kernel='linear', probability=True)
+    "Random Forest": RandomForestClassifier(random_state=42, class_weight='balanced'),
+    "Logistic Regression": LogisticRegression(max_iter=1000, class_weight='balanced'),
+    "Naive Bayes": GaussianNB(),  
+    "SVM": SVC(kernel='linear', probability=True, class_weight='balanced')
 }
 
 # Evaluate each model
@@ -92,13 +111,8 @@ for name, model in models.items():
     print(f"\n===== {name} =====")
     
     # Train the model
-    if name == "Naive Bayes":
-        # Naive Bayes doesn't work well with negative values, so use non-standardized data
-        model.fit(X_encoded.loc[X_train.index], y_train)
-        y_pred = model.predict(X_encoded.loc[X_test.index])
-    else:
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
+    model.fit(X_train_resampled, y_train_resampled)
+    y_pred = model.predict(X_test)
 
     #storing model for reuse
     model_predictions[name] = y_pred
@@ -136,12 +150,12 @@ for name, model in models.items():
     # Print evaluation
     print("Accuracy:", acc)
     print("F1 Score:", f1)
-    print("Classification Report:\n", classification_report(y_test, y_pred,zero_division=0))
+    # print("Classification Report:\n", classification_report(y_test, y_pred,zero_division=0))
 
     # Save model (optional)
     #joblib.dump(model, f'{name.lower().replace(" ", "_")}_model.pkl')
 
-# === Visualization ===
+# Visualization
 # Accuracy Plot
 plt.figure(figsize=(10, 5))
 plt.bar(accuracy_scores.keys(), accuracy_scores.values(), color='skyblue')
@@ -163,7 +177,45 @@ plt.grid(axis='y')
 plt.show()
 
 # 9. Inferencing (testing it on the remaining 20% of data)
-final_model_name = "Random Forest"
-print("\nSample Predictions:")
-print("Predicted:", models[final_model_name].predict(X_test[:5]))
-print("Actual   :", y_test[:5].values)
+final_model_name = ""
+init_int = 0.0000
+for name,value in f1_scores.items():
+  
+    if value >= init_int:
+        init_int = value
+        final_model_name = name
+
+print(f"Model selected for highest f1 score: {final_model_name}")
+
+#Test on firsst five samples
+# print("\nSample Predictions (First five):")
+# print("Predicted:", models[final_model_name].predict(X_test[:5]))
+# print("Actual   :", y_test[:5].values)
+
+#Test on random samples
+# import random
+
+# random_samples = X_test.sample(n=5, random_state=42)
+# random_indices = random_samples.index
+
+# #Get true labels for the samples
+# true_labels = y_test.loc[random_indices]
+
+# print("\nSample Predictions (Random):")
+# print("Predicted:", models[final_model_name].predict(random_samples))
+# print("Actual   :", true_labels.values)
+
+
+# Filter test set for 'Does not contain' class
+negative_class_indices = y_test[y_test == 'Does not contain'].index
+X_negative = X_test.loc[negative_class_indices]
+y_negative = y_test.loc[negative_class_indices]
+
+# Randomly sample 5 rows (or fewer if not enough available)
+sampled_X = X_negative.sample(n=min(5, len(X_negative)), random_state=42)
+sampled_y = y_negative.loc[sampled_X.index]
+
+# Show predictions
+print("\nSample Predictions from 'Does not contain' class:")
+print("Predicted:", models[final_model_name].predict(sampled_X))
+print("Actual   :", sampled_y.values)
